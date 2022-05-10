@@ -23,11 +23,6 @@ PORT=  # input db host port for docker-compose
 ```
 
 ```shell
-# export env variables
-export $(xargs < .env)
-```
-
-```shell
 # start db
 sudo docker-compose up -d
 ```
