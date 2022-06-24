@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ post.title }}
+{% endblock %}
+
+{% block body %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }} </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <h1>{{ post.title }}</h1>
+    <p>Author: {{ author.name }}#{{ author.id }}</p>
+    <p> {{ post.content }} </p>
+    <hr>
+    {% if tags %}
+        <p>Tags:</p>
+        <ul>
+        {% for tag in tags %}
+            <li>{{ tag }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post">
+        <div>
+            <label>Add tags: <input type="text" name="tags" placeholder="whitespace delimiter" required></label>
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+{% endblock %}
