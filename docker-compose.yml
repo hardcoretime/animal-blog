@@ -1,6 +1,24 @@
 version: "3.8"
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker-build/app/Dockerfile
+    environment:
+      DB_NAME: "${DB_NAME}"
+      DB_USERNAME: "${DB_NAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      PORT: "${PORT}"
+      SECRET_KEY: "${SECRET_KEY}"
+      SQLALCHEMY_DATABASE_URI: "postgresql+pg8000://${DB_USERNAME}:${DB_PASSWORD}@pg/${DB_NAME}"
+      CONFIG: ProductionConfig
+    ports:
+      - 5000:80
+    depends_on:
+      pg:
+        condition: service_healthy
+
   pg:
     image: postgres
     environment:
@@ -12,6 +30,11 @@ services:
       - "${PORT}:5432"
     volumes:
       - db-data:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db-data:
